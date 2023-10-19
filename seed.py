@@ -17,7 +17,7 @@ image1 = Image(
     gps_longitude="35.67",
     make="CANON",
     model="CANON EOS DIGITAL REBEL XTi",
-    path="img.jpeg",
+    path="./static/images/uni1.png",
     caption="Image caption")
 
 image2 = Image(
@@ -27,7 +27,7 @@ image2 = Image(
     gps_longitude="-118.25",
     make="NIKON",
     model="D850",
-    path="img2.jpeg",
+    path="./static/images/uni2.png",
     caption="")
 
 db.session.add_all([image1, image2])

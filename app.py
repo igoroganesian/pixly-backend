@@ -2,7 +2,7 @@ import os
 
 from flask import Flask, request, jsonify
 from werkzeug.utils import secure_filename
-from flask_debugtoolbar import DebugToolbarExtension
+# from flask_debugtoolbar import DebugToolbarExtension
 from flask_cors import CORS
 from models import  connect_db, Image
 from s3 import S3
@@ -13,7 +13,9 @@ load_dotenv()
 AWS_BUCKET_URL = "https://io-pixly.s3.us-west-1.amazonaws.com"
 
 app = Flask(__name__)
-cors = CORS(app)
+# CORS(app, resources={r"*": {"origins": "http://localhost:3000"}},
+#      supports_credentials=True)
+CORS(app)
 
 app.config['SECRET_KEY'] = "secret"
 
@@ -21,11 +23,15 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
     "DATABASE_URL", 'postgresql:///pixly')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True # displays SQL in terminal
-app.config['CORS_HEADERS'] = 'Content-Type'
+# app.config['CORS_HEADERS'] = 'Content-Type'
 
 connect_db(app)
 
-debug = DebugToolbarExtension(app)
+# debug = DebugToolbarExtension(app)
+
+# @app.route('/test-cors', methods=['GET'])
+# def test_cors():
+#     return "CORS headers should be set!"
 
 @app.get("/images")
 def get_images():
@@ -70,7 +76,7 @@ def upload_image():
         app.logger.error(f"Image upload failed: {e}")
         return jsonify(error=e)
 
-    url = S3.get_preassigned_url(image.path)
+    url = S3.get_presigned_url(image.path)
     serialize = image.serialize()
 
     return jsonify(images=[{"image_data": serialize, "url": url}])
