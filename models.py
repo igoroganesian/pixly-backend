@@ -2,7 +2,6 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 import PIL.Image as PILImage
 from PIL.ExifTags import TAGS
-import boto3
 
 db = SQLAlchemy()
 
@@ -11,7 +10,6 @@ EXIF_TAGS = ["DateTimeOriginal",
              "GPSLongitude",
              "Make",
              "Model"]
-
 
 def connect_db(app):
     """Connect to database."""
@@ -76,7 +74,6 @@ class Image (db.Model):
             "model": self.model,
             "path": self.path,
             "caption": self.caption,
-
         }
 
     @classmethod
@@ -155,40 +152,3 @@ class Image (db.Model):
 
         return {TAGS[key]: value for key, value in exif_data.items()
                 if TAGS[key] in EXIF_TAGS}
-
-class S3:
-    """Class for s3 bucket interactions."""
-
-    def __init__(self, region_name, access_key, secret_key):
-        self.s3 = boto3.client(
-            "s3",
-            region_name,
-            aws_access_key_id=access_key,
-            aws_secret_access_key=secret_key
-        )
-
-    def get_bucket_name(self):
-        """Return the bucket name."""
-        bucket_resp = self.s3.list_buckets()
-        bucket = bucket_resp['Buckets'][0]
-        return bucket['Name']
-
-    def get_presigned_url(self, obj_key, expiration=259000):
-        """Generate a presigned URL to share an S3 object."""
-        bucket = self.get_bucket_name()
-        url = self.s3.generate_presigned_url(
-            ClientMethod='get_object',
-            Params={'Bucket': bucket, 'Key': obj_key},
-            ExpiresIn=expiration)
-        return url
-
-    def upload_file(self, file_obj, save_as_name):
-        """Upload a file to the S3 bucket."""
-        bucket = self.get_bucket_name()
-        file_obj.seek(0)
-        self.s3.upload_fileobj(file_obj, bucket, save_as_name)
-
-    def download_file(self, file_name, save_as_name):
-        """Download a file from the S3 bucket."""
-        bucket = self.get_bucket_name()
-        self.s3.download_file(bucket, file_name, save_as_name)
