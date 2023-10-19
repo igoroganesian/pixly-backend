@@ -4,7 +4,7 @@ from flask import Flask, request, jsonify
 from werkzeug.utils import secure_filename
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_cors import CORS
-from models import db, connect_db, PILImage
+from models import db, connect_db, PILImage, Image, S3
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -24,3 +24,19 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 connect_db(app)
 
 debug = DebugToolbarExtension(app)
+
+@app.get("/images")
+def get_images():
+
+    search_term = request.args.get('search_term')
+    images = Image.query_images(search_term)
+
+    images_with_urls = [
+        {
+            "image_data": image.serialize(),
+            "url": S3.get_presigned_url(image.path)
+        }
+        for image in images
+    ]
+
+    return jsonify(images=images_with_urls)
