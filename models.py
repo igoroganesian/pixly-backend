@@ -128,7 +128,7 @@ class Image (db.Model):
         if search_term:
             # Using parameterized query to prevent SQL injections.
             images = (cls.query
-                      .filter(cls.caption.ilike("%{}%".format(search_term)))
+                      .filter(cls.caption.ilike(f"%{search_term}%"))
                       .order_by(cls.date_time_uploaded)
                       .all())
             return images
