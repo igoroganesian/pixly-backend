@@ -10,8 +10,6 @@ It pairs with the [Pix.ly frontend](https://github.com/igoroganesian/pixly-front
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
 
-[Back to top](#pixly-backend)
-
 ## Stack
 - Flask
 - AWS
@@ -23,6 +21,8 @@ It pairs with the [Pix.ly frontend](https://github.com/igoroganesian/pixly-front
 - Python3
 - PostgreSQL
 - AWS account
+
+[Back to top](#pixly-backend)
 
 ### Installation
 
@@ -59,3 +59,4 @@ It pairs with the [Pix.ly frontend](https://github.com/igoroganesian/pixly-front
    flask run
    (will likely require `flask run -p 5001` on macOS)
    ```
+[Back to top](#pixly-backend)
