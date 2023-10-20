@@ -57,6 +57,6 @@ It pairs with the [Pix.ly frontend](https://github.com/igoroganesian/pixly-front
 8. Run app:
    ```bash
    flask run
-   (will likely require `flask run -p 5001` on macOS)
+   Note: If you encounter an "address already in use" error, try running on port 5001 instead via: flask run -p 5001
    ```
 [Back to top](#pixly-backend)
