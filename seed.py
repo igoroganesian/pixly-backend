@@ -11,7 +11,6 @@ with app.app_context():
     db.drop_all()
     db.create_all()
 
-# List of sample images to upload
 sample_images = [
     {
         "path": "./static/images/uni1.png",
@@ -36,15 +35,11 @@ sample_images = [
 ]
 
 for image_data in sample_images:
-    # Extract the filename from the path
     file_name = os.path.basename(image_data["path"])
 
-    # Upload the image to S3
     with open(image_data["path"], "rb") as file:
-        # Store the file in S3 and use the filename as is in S3
         S3.upload_file(file, file_name)
 
-    # Create Image instance with updated path
     image_instance = Image(
         date_time_created=image_data["date_time_created"],
         date_time_uploaded=image_data["date_time_uploaded"],
@@ -52,7 +47,7 @@ for image_data in sample_images:
         gps_longitude=image_data["gps_longitude"],
         make=image_data["make"],
         model=image_data["model"],
-        path=file_name,  # use the filename as path
+        path=file_name,
         caption=image_data["caption"]
     )
 
