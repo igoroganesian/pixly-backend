@@ -13,7 +13,7 @@ with app.app_context():
 
 sample_images = [
     {
-        "path": "./static/images/uni1.png",
+        "path": "./static/images/forest1.png",
         "date_time_created": now.strftime("%m/%d/%Y, %H:%M:%S"),
         "date_time_uploaded": now,
         "gps_latitude": "23.45",
